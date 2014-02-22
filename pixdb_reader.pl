@@ -3,10 +3,13 @@ use GD;
 $img = new GD::Image->newFromPng('testpng.png',1);
 my ($w,$h) = $img->getBounds();
 
-
+if (!$ARGV[0]) {
+  usage();
+}
 my $header = $img->getPixel(0,0);
 my ($totalCols,$size,$maxRows) = $img->rgb($header);
-$size--;
+#$size--;
+$size = $ARGV[0];
 print $totalCols."\n";
 print $size."\n";
 print $maxRows."\n";
@@ -30,4 +33,9 @@ $col = 0;
 
   $row++;
 print "\n";
+}
+
+sub usage() {
+  print "pixdb_reader.pl:\n\tusage: perl pixdb_reader.pl SIZE\n\twhere SIZE = size of the fields, used in pixdb_loader.pl\n";
+exit;
 }
