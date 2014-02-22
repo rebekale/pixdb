@@ -1,6 +1,8 @@
 use GD;
-$w = 180;
+$totalCols = 10;
 $h = 400;
+$size = 7;
+$w = $size * $totalCols;
 
 $img = new GD::Image($w, $h,1);
 
@@ -18,13 +20,15 @@ $img->transparent($white);
 $img->interlaced('true');
 open(IN,"<$ARGV[0]");
 @colors;
-$row = 0;
+my $header = $img->colorAllocate($totalCols, $size,$h);
+    $img->setPixel(0,0,$header); 
+$row = 1;
 $flag = 0;  
 while(<IN>) {
 print $_;
   chomp;
-next if length($_) > 9;
-  $col = 0 + ($flag * 9);
+next if length($_) > $size;
+  $col = 0 + ($flag * $size);
   foreach my $l (split(/|/,$_)) {
    $o = ord($l);
 @rgb = (0,0,0);

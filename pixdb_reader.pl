@@ -1,9 +1,18 @@
 use GD;
-$w = 90;
-$h = 300;
-$img = new GD::Image->newFromPng('testpng.png',1);
 
-$row = 0;
+$img = new GD::Image->newFromPng('testpng.png',1);
+my ($w,$h) = $img->getBounds();
+
+
+my $header = $img->getPixel(0,0);
+my ($totalCols,$size,$maxRows) = $img->rgb($header);
+$size--;
+print $totalCols."\n";
+print $size."\n";
+print $maxRows."\n";
+
+
+$row = 1;
 
 while ($row < $h) {
 $col = 0;
@@ -14,7 +23,7 @@ $col = 0;
     print chr($r);
 
     $col++;
-    if ($col % 9 == 0) {
+    if ($col % $size == 0) {
 	print "\t";
     }
   }
