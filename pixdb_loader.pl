@@ -5,6 +5,8 @@ use GD;
 $totalCols = $ARGV[2];
 $h = $ARGV[1];
 $size = $ARGV[0];
+$osize = $ARGV[0];
+$size = 1 + int($size / 3);
 $w = $size * $totalCols;
 
 $img = new GD::Image($w, $h,1);
@@ -32,23 +34,36 @@ while(<IN>) {
   #print $_;
   chomp;
 
-  next if length($_) > $size;
+  next if length($_) > $osize;
 
   $col = 0 + ($flag * $size);
 
+  $lpos = 0;
+ my  @rgb = (0,0,0);
+$wf = 0;
   foreach my $l (split(/|/,$_)) {
     $o = ord($l);
-    @rgb = (0,0,0);
-    $rgb[int($col %3)] = $o;
-    #print "( @rgb ) @ $col:$row\n";
-
-
-    #my $color = $img->colorAllocate(ord($l),0,0);
-    #$color["$col,$row"] = $img->colorAllocate($rgb[0], $rgb[1],$rgb[2]);
-    $color->{"$col,$row"} = $img->colorAllocate($o,$o,$o);
-    $img->setPixel($col,$row,$color->{"$col,$row"}); 
-    $col++
+    
+    $rgb[$lpos] = $o;
+    $wf = 1;
+    if ($lpos == 2) {
+      #$color->{"$col,$row"} = $img->colorAllocate($o,$o,$o);
+      $color->{"$col,$row"} = $img->colorAllocate($rgb[0],$rgb[1],$rgb[2]);
+      $img->setPixel($col,$row,$color->{"$col,$row"}); 
+      $col++;
+      $lpos = 0; 
+      @rgb = (0,0,0);
+      $wf = 0;
+    } else {
+      $lpos++;
+    }
   } 
+  if ($wf == 1) {
+      $color->{"$col,$row"} = $img->colorAllocate($rgb[0],$rgb[1],$rgb[2]);
+      $img->setPixel($col,$row,$color->{"$col,$row"}); 
+      $col++
+
+  }
   $count++;
   $row++;
   if ($row == $h) {
@@ -57,7 +72,7 @@ while(<IN>) {
     $row = 0;
   }
 }
-open(OUT,"> testpng.gif");
+open(OUT,"> testpngPacked.gif");
 binmode OUT;
 print OUT $img->gif;
 close(OUT);
