@@ -1,3 +1,4 @@
+$| = 1;
 if (!$ARGV[3] ) {
   usage();
 }
@@ -19,7 +20,7 @@ $white = $img->colorAllocate(255,255,255);
         
 my $count;        
 $img->colorAllocate(255,255,255);
-$img->transparent($white);
+$img->transparent($black);
 $img->interlaced('true');
 open(IN,"<$ARGV[3]");
 $color;
@@ -61,28 +62,22 @@ $wf = 0;
   if ($wf == 1) {
       $color->{"$col,$row"} = $img->colorAllocate($rgb[0],$rgb[1],$rgb[2]);
       $img->setPixel($col,$row,$color->{"$col,$row"}); 
-      $col++
+      $col++;
+  $count++;
 
   }
-  $count++;
   $row++;
   if ($row == $h) {
+print ".";
     last if $col >= $w;
     $flag++;
     $row = 0;
   }
 }
-open(OUT,"> testpngPacked.gif");
-binmode OUT;
-print OUT $img->gif;
-close(OUT);
 open(OUT,"> testpng.png");
 binmode OUT;
-print OUT $img->png;
+print OUT $img->png(0);
 close(OUT);
-open(OUT,"> testpng.jpg");
-binmode OUT;
-print OUT $img->jpeg;
 
 print "Total Records: $count\n";
 
