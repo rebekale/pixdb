@@ -11,6 +11,8 @@ my $header = $img->getPixel(0,0);
 my ($totalCols,$size,$maxRows) = $img->rgb($header);
 $size = chr($size);
 
+$size = 1 + int($size / 3);
+
 print "field size: $size\n";
 
 
@@ -23,6 +25,8 @@ $col = 0;
     my $index = $img->getPixel($col, $row);
     my ($r,$g,$b) = $img->rgb($index);
     print chr($r);
+    print chr($g);
+    print chr($b);
 
     $col++;
     if ($col % $size == 0) {
