@@ -1,18 +1,17 @@
 use GD;
 
 $img = new GD::Image->newFromPng('testpng.png',1);
+$img->interlaced('true');
 my ($w,$h) = $img->getBounds();
 
 if (!$ARGV[0]) {
-  usage();
+  #usage();
 }
 my $header = $img->getPixel(0,0);
 my ($totalCols,$size,$maxRows) = $img->rgb($header);
-#$size--;
-$size = $ARGV[0];
-print $totalCols."\n";
-print $size."\n";
-print $maxRows."\n";
+$size = chr($size);
+
+print "field size: $size\n";
 
 
 $row = 1;
